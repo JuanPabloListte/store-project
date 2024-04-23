@@ -1,3 +1,9 @@
+from config.wsgi import *
 from django.test import TestCase
+from core.models import *
 
-# Create your tests here.
+query = Type.objects.all()
+print(query)
+
+t = Type.objects.get(pk=1)
+print(t)
