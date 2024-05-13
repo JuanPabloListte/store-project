@@ -1,0 +1,76 @@
+{% extends 'index.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="col-12" style="height: 500px">
+        <form method="post" action=".">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        {% if action == 'add' %}
+                            <i class="fa-solid fa-plus"></i>
+                        {% else %}
+                            <i class="fa-solid fa-edit"></i>
+                        {% endif %}
+                        {{ title }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="{{ action }}">
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="email">{{ field.label }}</label>
+                            {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btnTest">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save data
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        {% if form.errors %}
+            let errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: errors,
+                icon: 'error',
+            })
+        {% endif %}
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            const parameters = $(this).serializeArray();
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: parameters,
+                dataType: 'json'
+            }).done(function (data) {
+                if (!data.hasOwnProperty('error')) {
+                    location.href = '{{ list_url }}';
+                    return false;
+                }
+                message_error(data.error);
+
+            }).fail(function (data) {
+                alert('Error')
+            }).always(function (data) {
+            })
+        })
+
+    </script>
+{% endblock %}

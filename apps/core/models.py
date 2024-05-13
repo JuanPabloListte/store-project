@@ -14,8 +14,8 @@ gender_choices = [
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Names', unique=True)
-    description = models.CharField(max_length=300, verbose_name='Description', blank=True, null=True)
+    name = models.CharField(max_length=100, verbose_name='name', unique=True)
+    description = models.CharField(max_length=300, verbose_name='description', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -32,8 +32,8 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Names', unique=True)
-    category = models.ForeignKey(Category, verbose_name='Category', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, verbose_name='name', unique=True)
+    category = models.ForeignKey(Category, verbose_name='category', on_delete=models.CASCADE)
     image = models.ImageField(verbose_name='Image', upload_to='products/%Y/%m/%d/', null=True, blank=True)
     price = models.DecimalField(default=0, max_digits=9, decimal_places=2, verbose_name='Price')
 
@@ -48,7 +48,7 @@ class Product(models.Model):
 
 
 class Client(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Names', unique=True)
+    name = models.CharField(max_length=100, verbose_name='Name', unique=True)
     surname = models.CharField(max_length=100, verbose_name='Surname', unique=True)
     dni = models.CharField(max_length=10, verbose_name='DNI', unique=True)
     birth_date = models.DateField(default=timezone.now(), verbose_name='Birth Date', null=True, blank=True)

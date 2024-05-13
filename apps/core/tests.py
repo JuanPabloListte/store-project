@@ -1,6 +1,4 @@
-from config.wsgi import *
-from django.test import TestCase
-from core.models import *
+from apps.core.models import *
 
 data = ['Carnes', 'Frutas', 'Verduras', 'Cereales']
 for i in data:
