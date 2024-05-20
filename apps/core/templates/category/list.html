@@ -1,0 +1,79 @@
+{% extends 'list.html' %}
+{% block columns %}
+    <tr>
+        <th scope="col">Number</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Options</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for category in object_list %}
+        <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            {% if category.description is None %}
+                <td></td>
+            {% else %}
+                <td>{{ category.description }}</td>
+            {% endif %}
+            <td>
+                <a href="{% url 'update' category.id %}" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <button class="btn btn-danger btn-sm delete-category"
+                        data-id="{{ category.id }}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $('.delete-category').click(function (event) {
+                event.preventDefault();
+                const categoryId = $(this).data('id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This action can not be undone. Do you want to delete the category?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete',
+                    cancelButtonText: 'No, cancel',
+                }).then((result) => {
+                    const categoryId = $(this).data('id');
+                    const pk = parseInt(categoryId);
+                    if (result.value) {
+                        console.log(pk)
+                        $.ajax({
+                            url: `delete/${pk}/`,
+                            type: 'POST',
+                            data: {},
+                            dataType: 'json',
+
+                        }).done(function (data) {
+                            if (!data.hasOwnProperty('error')) {
+                                Swal.fire('Success!', 'Category deleted successfully.', 'success');
+                                setTimeout(function () {
+                                    location.href = '{{ list_url }}';
+                                }, 3000);
+                            } else {
+                                Swal.fire('Error', data.error, 'error');
+                            }
+                        }).fail(function (data) {
+                            Swal.fire('Error', 'Ocurrió un error inesperado.', 'error');
+                        });
+                    } else {
+                        return
+                    }
+                });
+            });
+        });
+    </script>
+
+
+{% endblock %}
