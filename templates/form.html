@@ -23,6 +23,7 @@
                             {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
                         </div>
                     {% endfor %}
+
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary btnTest">
@@ -44,6 +45,9 @@
                     errors += '{{ error }}\n';
                 {% endfor %}
             {% endfor %}
+            {% for error in form.non_fields_errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
             Swal.fire({
                 title: 'Error!',
                 text: errors,
@@ -51,7 +55,7 @@
             })
         {% endif %}
 
-        $('form').on('submit', function (e) {
+        /*$('form').on('submit', function (e) {
             e.preventDefault();
             const parameters = $(this).serializeArray();
             $.ajax({
@@ -70,7 +74,7 @@
                 alert('Error')
             }).always(function (data) {
             })
-        })
+        })*/
 
     </script>
 {% endblock %}

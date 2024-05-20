@@ -1,0 +1,85 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'lib/adminlte/plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminlte/css/adminlte.min.css' %}">
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        .custom-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.5s;
+        }
+    </style>
+</head>
+<body class="hold-transition layout-top-nav" style="background-color: #e0e0e0 ;">
+<div class="login-logo mt-5">
+    <a href="{% url 'home' %}"><b>Sau</b>Le</a>
+</div>
+<div class="container d-flex align-content-center justify-content-center mt-5">
+    <div class="form-group w-50 p-5 d-flex flex-column align-content-center justify-content-center border border-1
+     border-dark-subtle login-card-body" style="border-radius: 10px; box-shadow: 0px 5px 10px rgba(0,0,0,0.2);">
+        <p class="login-box-msg"
+           style="font-size: 22px; color: #666; font-weight: normal; font-family: Arial, sans-serif;">Sign in to start
+            your session</p>
+        <form action="." method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                {{ form.username|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Enter your username' }}
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                {{ form.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Password' }}
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-block custom-scale">
+                        <i class="fas fa-sign-in-alt mr-1"></i>Sign In
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+<script src="{% static 'lib/adminlte/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'lib/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'lib/adminlte/js/adminlte.min.js' %}"></script>
+
+<div>
+    <script>
+        {% if form.errors %}
+            let errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid username or password. Please try again.',
+                icon: 'error',
+            });
+        {% endif %}
+    </script>
+</div>
+</body>
+</html>
