@@ -36,3 +36,9 @@ class CategoryForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+    def clean(self):
+        data = super().clean()
+
+        if len(data['name']) < 40:
+            self.add_error('name', 'Name must be at least 4 characters long')
